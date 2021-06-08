@@ -6,6 +6,7 @@ import importlib
 # from nacak import nacak
 # from social_distance_detector import cobacoba
 from social_distance_detector import start
+from live_yolo_opencv import start_cam
 # import random
 # import string
 from cryptography.fernet import Fernet
@@ -66,6 +67,11 @@ def render():
 
     start( ('upload/'+decMessage), ('output/'+decMessage+'.avi'), 0)
     return jsonify(decMessage)
+@app.route('/oncam')
+def oncam():
+    start_cam()
+    return "<a href='/'>RETURN</a>"
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('page_not_found.html'), 404

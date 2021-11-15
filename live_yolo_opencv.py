@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import imutils
 import time
+# from app import mysql
 from scipy.spatial import distance as dist
 def start_cam():
     CONFIDENCE = 0.5
@@ -146,6 +147,11 @@ def start_cam():
                     print("Pelanggaran:", pelanggaran, "Violate:", len(violate))
                     pelanggaran = len(violate)
                     # insert to db
+                    conn = mysql.connect()
+                    cursor = conn.cursor()
+                    cursor.execute("INSERT INTO pelanggaran (jml_pelanggaran) VALUES (%s)", (len(violate)))
+                    conn.commit()
+                    cursor.close()
                 else :
                     # don't insert to db
                     print("masih sama :", pelanggaran)

@@ -1,6 +1,7 @@
 import os
 from flask import (Flask, render_template, url_for, request, abort, redirect, make_response, session, flash, abort, jsonify)
 from werkzeug.utils import secure_filename
+from flaskext.mysql import MySQL
 # from pprint import pprint
 import importlib
 # from nacak import nacak
@@ -14,6 +15,13 @@ from uuid import uuid4
 
 
 app = Flask(__name__)
+mysql = MySQL()
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = ''
+app.config['MYSQL_DATABASE_DB'] = 'sdc_cnn'
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+mysql.init_app(app)
+
 app.secret_key = 'uripkayakietemenyah'
 
 ALLOWED_EXTENSION = set(['mp4', 'jpg', 'png'])
@@ -57,7 +65,7 @@ def index():
     #     encMessage = encMessage.encode()
     #     decMessage = fernet.decrypt(encMessage).decode()
     return render_template('index.html', filename=encMessage)
-    
+
 @app.route('/render', methods=['GET', 'POST'])
 def render():
     if request.method == 'POST':

@@ -129,7 +129,7 @@ def start(input, output, display):
 			fourcc = cv2.VideoWriter_fourcc(*"MJPG")
 			writer = cv2.VideoWriter(output, fourcc, 25,
 				(frame.shape[1], frame.shape[0]), True)
-				
+
 		# if the video writer is not None, write the frame to the output
 		# video file
 		if writer is not None:

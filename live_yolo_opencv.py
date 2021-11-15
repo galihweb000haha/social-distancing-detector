@@ -20,6 +20,7 @@ def start_cam():
     ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
     cap = cv2.VideoCapture(0)
+    pelanggaran = 0
 
     while True:
         _, image = cap.read()
@@ -46,6 +47,7 @@ def start_cam():
                 # discard weak predictions by ensuring the detected
                 # probability is greater than the minimum probability
                 if class_id == LABELS.index("person") and confidence > CONFIDENCE:
+
                     # scale the bounding box coordinates back relative to the
                     # size of the image, keeping in mind that YOLO actually
                     # returns the center (x, y)-coordinates of the bounding
@@ -118,7 +120,7 @@ def start_cam():
                             # the centroid pairs
                             violate.add(i)
                             violate.add(j)
-            
+
             # loop over the results
             for (i, (prob, bbox, centroid)) in enumerate(results):
                 # extract the bounding box and centroid coordinates, then
@@ -139,10 +141,23 @@ def start_cam():
 
             # draw the total number of social distancing violations on the
             # output frame
+            if (len(violate) >= 2):
+                if (pelanggaran != len(violate)) :
+                    print("Pelanggaran:", pelanggaran, "Violate:", len(violate))
+                    pelanggaran = len(violate)
+                    # insert to db
+                else :
+                    # don't insert to db
+                    print("masih sama :", pelanggaran)
+
+                    # print("Jumlah Pelanggaran : ", len(violate))
+
+
+
             text = "Social Distancing Violations: {}".format(len(violate))
             cv2.putText(image, text, (10, image.shape[0] - 25),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.85, (0, 0, 255), 3)
-            # kesini----            
+            # kesini----
 
         cv2.imshow("image", image)
         if ord("q") == cv2.waitKey(1):

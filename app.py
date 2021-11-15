@@ -63,9 +63,10 @@ def render():
     if request.method == 'POST':
         encMessage = request.form['f'].encode()
         decMessage = fernet.decrypt(encMessage).decode()
+        # request.form['f']
     # format = request.args.get('format')
 
-    start( ('upload/'+decMessage), ('output/'+decMessage+'.avi'), 0)
+    start( ('upload/'+decMessage), ('output/'+decMessage+'.avi'), 1)
     return jsonify(decMessage)
 @app.route('/oncam')
 def oncam():

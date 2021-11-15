@@ -70,6 +70,10 @@
             <div class="form-group">
                 <a href="render?format=avi&f={{filename}}" class="btn btn-secondary" id="href" role="button" aria-disabled="true">Render..</a>
             </div>
+            <div class="form-group">
+                <input type="checkbox" name="showframe" id="showframe">
+                <label for="showframe">Show frame</label>
+            </div>                
         </form>
         <a href="/oncam" class="badge badge-primary">coba on cam</a>
         <div class="load-el d-none">
@@ -89,13 +93,17 @@
         $("#sel1").on('change', function(){
             $("#href").attr('href', 'render?format=' + $(this).val() + '&f=' + $(this).data('filename'));
         });
+        $("#showframe").on('change', function(){
+            console.log($(this).val());
+        });
         $('#href').click(function(e){
             e.preventDefault()
             $.ajax({
                 url: $('.root').text() + "render",
                 type: "POST",
                 data: {
-                    'f': $("#sel1").data('filename')
+                    'f': $("#sel1").data('filename'),
+                    'showframe': $("#showframe").val()
                 },
                 dataType: "json",
                 beforeSend: function(){

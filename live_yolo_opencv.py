@@ -3,8 +3,12 @@ import numpy as np
 import imutils
 import time
 # from app import mysql
+
 from scipy.spatial import distance as dist
-def start_cam():
+def start_cam(mysql):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
     CONFIDENCE = 0.5
     SCORE_THRESHOLD = 0.5
     IOU_THRESHOLD = 0.5
@@ -147,11 +151,9 @@ def start_cam():
                     print("Pelanggaran:", pelanggaran, "Violate:", len(violate))
                     pelanggaran = len(violate)
                     # insert to db
-                    conn = mysql.connect()
-                    cursor = conn.cursor()
                     cursor.execute("INSERT INTO pelanggaran (jml_pelanggaran) VALUES (%s)", (len(violate)))
                     conn.commit()
-                    cursor.close()
+                    
                 else :
                     # don't insert to db
                     print("masih sama :", pelanggaran)
@@ -167,6 +169,7 @@ def start_cam():
 
         cv2.imshow("image", image)
         if ord("q") == cv2.waitKey(1):
+            cursor.close()
             break
 
     cap.release()

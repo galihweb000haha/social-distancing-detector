@@ -13,6 +13,9 @@ from live_yolo_opencv import start_cam
 from cryptography.fernet import Fernet
 from uuid import uuid4
 
+import geocoder
+g = geocoder.ip('me')
+print(g.latlng)
 
 app = Flask(__name__)
 mysql = MySQL()
@@ -78,7 +81,7 @@ def render():
     return jsonify(decMessage)
 @app.route('/oncam')
 def oncam():
-    start_cam()
+    start_cam(mysql)
     return "<a href='/'>RETURN</a>"
 
 @app.errorhandler(404)
